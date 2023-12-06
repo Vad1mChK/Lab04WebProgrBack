@@ -23,7 +23,8 @@ tasks.withType(JavaCompile) {
 
 dependencies {
     compileOnly('jakarta.platform:jakarta.jakartaee-web-api:9.1.0')
-    implementation('org.eclipse.persistence:org.eclipse.persistence.jpa:3.0.2')
+    implementation('org.hibernate:hibernate-core:6.0.2.Final')
+    implementation('org.postgresql:postgresql:42.7.0')
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
