@@ -22,8 +22,12 @@ public class Sha512Hasher implements Hasher {
      *
      * @throws NoSuchAlgorithmException If the SHA-512 algorithm is not available.
      */
-    public Sha512Hasher() throws NoSuchAlgorithmException {
-        this.digest = MessageDigest.getInstance("SHA-512");
+    public Sha512Hasher() {
+        try {
+            this.digest = MessageDigest.getInstance("SHA-512");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
         this.pepper = new byte[0];
     }
 
@@ -33,8 +37,12 @@ public class Sha512Hasher implements Hasher {
      * @param pepper The pepper byte array to use in the hashing process.
      * @throws NoSuchAlgorithmException If the SHA-512 algorithm is not available.
      */
-    public Sha512Hasher(byte[] pepper) throws NoSuchAlgorithmException {
-        this.digest = MessageDigest.getInstance("SHA-512");
+    public Sha512Hasher(byte[] pepper) {
+        try {
+            this.digest = MessageDigest.getInstance("SHA-512");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
         this.pepper = pepper != null ? pepper : new byte[0];
     }
 

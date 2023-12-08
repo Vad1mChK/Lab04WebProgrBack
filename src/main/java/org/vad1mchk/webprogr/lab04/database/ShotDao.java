@@ -51,8 +51,8 @@ public class ShotDao implements Dao<Shot> {
         }
     }
 
-    public void deleteAllByOwner(User owner) {
-        Query query = entityManager.createQuery("DELETE FROM Shot WHERE owner=:o");
+    public void deleteByOwner(User owner) {
+        TypedQuery<User> query = entityManager.createQuery("DELETE FROM Shot WHERE owner = :o", User.class);
         query.setParameter("o", owner);
         query.executeUpdate();
     }

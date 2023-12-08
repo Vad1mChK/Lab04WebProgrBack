@@ -1,9 +1,12 @@
-package org.vad1mchk.webprogr.lab04.service;
+package org.vad1mchk.webprogr.lab04.util;
+
+import jakarta.ejb.Stateless;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class UserValidator {
+@Stateless
+public class CredentialsValidator {
     private static final int USERNAME_MIN_LENGTH = 4;
     private static final int USERNAME_MAX_LENGTH = 32;
     private static final int PASSWORD_MIN_LENGTH = 8;
@@ -50,7 +53,7 @@ public class UserValidator {
         return null;
     }
 
-    private static int countMatches(String text, Pattern regex) {
+    private int countMatches(String text, Pattern regex) {
         Matcher matcher = regex.matcher(text);
         int count = 0;
         while (matcher.find()) {
