@@ -14,7 +14,5 @@ public interface Dao<E> {
 
     E update(E element);
 
-    void deleteAll();
-
     void delete(E element);
 }

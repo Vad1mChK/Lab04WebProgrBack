@@ -1,4 +1,4 @@
-package org.vad1mchk.webprogr.lab04.util;
+package org.vad1mchk.webprogr.lab04.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

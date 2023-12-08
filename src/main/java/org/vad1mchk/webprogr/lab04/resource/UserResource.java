@@ -3,12 +3,12 @@ package org.vad1mchk.webprogr.lab04.resource;
 import jakarta.ejb.EJB;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Request;
 import jakarta.ws.rs.core.Response;
+import org.vad1mchk.webprogr.lab04.model.request.UserRequestDto;
+import org.vad1mchk.webprogr.lab04.security.Secured;
 import org.vad1mchk.webprogr.lab04.service.UserService;
 import org.vad1mchk.webprogr.lab04.util.JsonUtils;
 
@@ -22,7 +22,6 @@ public class UserResource {
     private UserService service;
 
     @GET
-    @Path("/all")
     public Response getAllUsers() {
         JsonArray array;
         try {
@@ -30,6 +29,12 @@ public class UserResource {
         } catch (IllegalArgumentException e) {
             return Response.serverError().build();
         }
-        return Response.ok(array).build();
+        return Response.ok(service.getAllUsers()).build();
+    }
+
+    @DELETE
+    @Secured
+    public Response deleteAll() {
+        return Response.status(418).build();
     }
 }

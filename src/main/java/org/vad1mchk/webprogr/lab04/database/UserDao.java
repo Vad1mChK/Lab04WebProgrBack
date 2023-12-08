@@ -47,11 +47,6 @@ public class UserDao implements Dao<User> {
     }
 
     @Override
-    public void deleteAll() {
-        entityManager.clear();
-    }
-
-    @Override
     public void delete(User element) {
         if (entityManager.contains(element)) {
             entityManager.remove(element);

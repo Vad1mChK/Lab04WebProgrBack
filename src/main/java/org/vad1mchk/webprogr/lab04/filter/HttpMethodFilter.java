@@ -1,4 +1,4 @@
-package org.vad1mchk.webprogr.lab04.util;
+package org.vad1mchk.webprogr.lab04.filter;
 
 import jakarta.annotation.Priority;
 import jakarta.ws.rs.Priorities;

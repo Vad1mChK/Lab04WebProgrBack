@@ -6,7 +6,10 @@ import jakarta.ejb.TransactionManagement;
 import jakarta.ejb.TransactionManagementType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import org.vad1mchk.webprogr.lab04.model.entity.Shot;
+import org.vad1mchk.webprogr.lab04.model.entity.User;
 
 import java.util.List;
 
@@ -40,16 +43,17 @@ public class ShotDao implements Dao<Shot> {
     }
 
     @Override
-    public void deleteAll() {
-        entityManager.clear();
-    }
-
-    @Override
     public void delete(Shot element) {
         if (entityManager.contains(element)) {
             entityManager.remove(element);
         } else {
             entityManager.remove(entityManager.merge(element));
         }
+    }
+
+    public void deleteAllByOwner(User owner) {
+        Query query = entityManager.createQuery("DELETE FROM Shot WHERE owner=:o");
+        query.setParameter("o", owner);
+        query.executeUpdate();
     }
 }
