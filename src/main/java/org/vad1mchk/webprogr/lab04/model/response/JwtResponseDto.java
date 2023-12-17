@@ -3,6 +3,10 @@ package org.vad1mchk.webprogr.lab04.model.response;
 public class JwtResponseDto {
     private String jwt;
 
+    public JwtResponseDto(String jwt) {
+        this.jwt = jwt;
+    }
+
     public String getJwt() {
         return jwt;
     }

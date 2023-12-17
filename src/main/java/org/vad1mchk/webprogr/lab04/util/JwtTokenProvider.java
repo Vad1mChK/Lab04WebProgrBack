@@ -1,18 +1,25 @@
-package org.vad1mchk.webprogr.lab04.security;
+package org.vad1mchk.webprogr.lab04.util;
 
 import io.jsonwebtoken.*;
 import java.util.Date;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecureDigestAlgorithm;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
+import org.vad1mchk.webprogr.lab04.database.DisposedJwtDao;
 
 import javax.crypto.SecretKey;
 
+@Stateless
 public class JwtTokenProvider {
     public static final long EXPIRATION_TIMEOUT_MS = 24 * 60 * 60 * 1000; // 24 hours
 
     private final SecretKey secretKey;
 
-    public JwtTokenProvider() {
+    @EJB
+    private DisposedJwtDao disposedJwtDao;
+
+    {
         String secret = System.getenv("w_SECRET_KEY");
         secretKey = Keys.hmacShaKeyFor(secret.getBytes());
     }
@@ -28,6 +35,7 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try {
+            if (disposedJwtDao.exists(token)) return false;
             Jwts.parser()
                     .verifyWith(secretKey)
                     .build()

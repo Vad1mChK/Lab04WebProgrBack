@@ -1,16 +1,21 @@
 package org.vad1mchk.webprogr.lab04.service;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
+import jakarta.persistence.PersistenceException;
 import jakarta.security.auth.message.AuthException;
 import org.vad1mchk.webprogr.lab04.database.DisposedJwtDao;
 import org.vad1mchk.webprogr.lab04.database.UserDao;
+import org.vad1mchk.webprogr.lab04.model.entity.DisposedJwt;
 import org.vad1mchk.webprogr.lab04.model.entity.User;
 import org.vad1mchk.webprogr.lab04.model.request.UserRequestDto;
+import org.vad1mchk.webprogr.lab04.model.response.JwtResponseDto;
 import org.vad1mchk.webprogr.lab04.model.response.UserResponseDto;
 import org.vad1mchk.webprogr.lab04.security.Hasher;
 import org.vad1mchk.webprogr.lab04.security.Sha512Hasher;
 import org.vad1mchk.webprogr.lab04.util.CredentialsValidator;
+import org.vad1mchk.webprogr.lab04.util.JwtTokenProvider;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -28,6 +33,9 @@ public class UserService {
 
     @EJB
     private CredentialsValidator credentialsValidator;
+
+    @EJB
+    private JwtTokenProvider jwtProvider;
 
     // Method just for debug purposes.
     public List<UserResponseDto> getAllUsers() {
@@ -59,7 +67,7 @@ public class UserService {
         return new UserResponseDto(user.getId(), user.getUsername());
     }
 
-    public UserResponseDto logInUser(UserRequestDto request) throws AuthException {
+    public JwtResponseDto loginUser(UserRequestDto request) throws AuthException {
         User user = userDao.selectByUsername(request.getUsername());
 
         if (user == null) {
@@ -78,7 +86,33 @@ public class UserService {
             throw new AuthException("Неверный пароль.");
         }
 
-        return new UserResponseDto(user.getId(), user.getUsername());
+        String jwt = jwtProvider.generateToken(user.getUsername());
+
+        return new JwtResponseDto(jwt);
+    }
+
+    public void logoutUser(String jwt) throws AuthException {
+        if (jwtProvider.validateToken(jwt)) {
+            disposedJwtDao.insert(new DisposedJwt(jwt));
+        } else {
+            throw new AuthException("JWT-токен не валиден.");
+        }
+    }
+
+    public UserResponseDto whoAmI(String jwt) throws AuthException {
+        if (jwtProvider.validateToken(jwt)) {
+            String username = jwtProvider.getSubject(jwt);
+            if (username == null) {
+                throw new JwtException("Невозможно получить имя пользователя из JWT-токена.");
+            }
+            User user = userDao.selectByUsername(username);
+            if (user == null) {
+                throw new AuthException("Пользователя с именем, указанном в JWT-токене, не существует.");
+            }
+            return new UserResponseDto(user.getId(), user.getUsername());
+        } else {
+            throw new AuthException("JWT-токен не валиден.");
+        }
     }
 
     private void validateCredentials(String username, String password) throws AuthException {

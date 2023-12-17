@@ -45,9 +45,9 @@ public class ShotDao {
         }
     }
 
-    public void deleteByOwner(User owner) {
-        TypedQuery<User> query = entityManager.createQuery("DELETE FROM Shot WHERE owner = :o", User.class);
+    public int deleteByOwner(User owner) {
+        Query query = entityManager.createQuery("DELETE FROM Shot WHERE owner = :o");
         query.setParameter("o", owner);
-        query.executeUpdate();
+        return query.executeUpdate();
     }
 }

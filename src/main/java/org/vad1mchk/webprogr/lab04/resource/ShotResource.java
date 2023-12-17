@@ -5,83 +5,63 @@ import jakarta.ejb.EJB;
 import jakarta.security.auth.message.AuthException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Request;
 import jakarta.ws.rs.core.Response;
-import org.vad1mchk.webprogr.lab04.model.request.UserRequestDto;
+import org.vad1mchk.webprogr.lab04.model.request.ShotRequestDto;
 import org.vad1mchk.webprogr.lab04.model.response.ErrorMessageResponseDto;
-import org.vad1mchk.webprogr.lab04.model.response.JwtResponseDto;
-import org.vad1mchk.webprogr.lab04.model.response.UserResponseDto;
-import org.vad1mchk.webprogr.lab04.service.UserService;
+import org.vad1mchk.webprogr.lab04.model.response.ShotResponseDto;
+import org.vad1mchk.webprogr.lab04.service.ShotService;
 
-@Path("/auth")
+import java.util.List;
+
+@Path("/shot")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class UserResource {
+public class ShotResource {
     @EJB
-    private UserService service;
+    private ShotService service;
 
     @GET
-    public Response getAllUsers() {
-        return Response.ok(service.getAllUsers()).build();
-    }
-
-    @POST
-    @Path("/register")
-    public Response registerUser(UserRequestDto requestDto) {
-        UserResponseDto responseDto;
-        try {
-            responseDto = service.registerUser(requestDto);
-        } catch (AuthException | IllegalArgumentException e) {
-            return Response
-                    .status(Response.Status.BAD_REQUEST)
-                    .entity(new ErrorMessageResponseDto(e))
-                    .build();
-        }
-        return Response.ok(responseDto).build();
-    }
-
-    @POST
-    @Path("/login")
-    public Response loginUser(UserRequestDto requestDto) {
-        JwtResponseDto responseDto;
-        try {
-            responseDto = service.loginUser(requestDto);
-        } catch (AuthException e) {
-            return Response
-                    .status(Response.Status.BAD_REQUEST)
-                    .entity(new ErrorMessageResponseDto(e))
-                    .build();
-        }
-        return Response.ok(responseDto).build();
-    }
-
-    @POST
-    @Path("/logout")
-    public Response logoutUser(@HeaderParam("Authorization") String authHeader) {
+    public Response getAllShots(@HeaderParam("Authorization") String authHeader) {
         Response errorResponse = checkAuthHeader(authHeader);
         if (errorResponse != null) return errorResponse;
 
         String jwt = jwtFromAuthHeader(authHeader);
 
         try {
-            service.logoutUser(jwt);
+            List<ShotResponseDto> responseDtoList = service.getAllShots(jwt);
+            return Response.ok(responseDtoList).build();
         } catch (AuthException e) {
             return Response.status(Response.Status.UNAUTHORIZED).entity(new ErrorMessageResponseDto(e)).build();
+        } catch (JwtException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageResponseDto(e)).build();
         }
-
-        return Response.ok().entity("User logged out successfully.").build();
     }
 
-    @GET
-    @Path("/whoami")
-    public Response whoAmI(@HeaderParam("Authorization") String authHeader) {
+    @POST
+    public Response addShot(@HeaderParam("Authorization") String authHeader, ShotRequestDto requestDto) {
         Response errorResponse = checkAuthHeader(authHeader);
         if (errorResponse != null) return errorResponse;
 
         String jwt = jwtFromAuthHeader(authHeader);
-
         try {
-            return Response.ok().entity(service.whoAmI(jwt)).build();
+            ShotResponseDto responseDto = service.addShot(jwt, requestDto);
+            return Response.ok(responseDto).build();
+        } catch (AuthException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity(new ErrorMessageResponseDto(e)).build();
+        } catch (IllegalArgumentException | JwtException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessageResponseDto(e)).build();
+        }
+    }
+
+    @POST // Because the target server seems to ban DELETE
+    @Path("/delete")
+    public Response deleteShotsByOwner(@HeaderParam("Authorization") String authHeader) {
+        Response errorResponse = checkAuthHeader(authHeader);
+        if (errorResponse != null) return errorResponse;
+
+        String jwt = jwtFromAuthHeader(authHeader);
+        try {
+            return Response.ok(service.deleteShotsByOwner(jwt)).build();
         } catch (AuthException e) {
             return Response.status(Response.Status.UNAUTHORIZED).entity(new ErrorMessageResponseDto(e)).build();
         } catch (JwtException e) {

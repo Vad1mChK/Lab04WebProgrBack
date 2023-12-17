@@ -3,6 +3,7 @@ package org.vad1mchk.webprogr.lab04.model.entity;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
@@ -15,7 +16,8 @@ public class Shot {
     private BigDecimal y;
     private BigDecimal r;
     private boolean hit;
-    private ZonedDateTime creationDateTime;
+    private LocalDateTime creationDateTime;
+    private int zoneOffsetSeconds;
     private long timeElapsedNanoseconds;
 
     public Shot() {
@@ -80,12 +82,21 @@ public class Shot {
     }
 
     @Column(name = "creation_date_time")
-    public ZonedDateTime getCreationDateTime() {
+    public LocalDateTime getCreationDateTime() {
         return creationDateTime;
     }
 
-    public void setCreationDateTime(ZonedDateTime creationDateTime) {
+    public void setCreationDateTime(LocalDateTime creationDateTime) {
         this.creationDateTime = creationDateTime;
+    }
+
+    @Column(name = "zone_offset_seconds")
+    public int getZoneOffsetSeconds() {
+        return zoneOffsetSeconds;
+    }
+
+    public void setZoneOffsetSeconds(int zoneOffsetSeconds) {
+        this.zoneOffsetSeconds = zoneOffsetSeconds;
     }
 
     @Column(name = "time_elapsed_ns")
@@ -102,12 +113,19 @@ public class Shot {
         if (this == o) return true;
         if (!(o instanceof Shot)) return false;
         Shot shot = (Shot) o;
-        return id == shot.id && hit == shot.hit && timeElapsedNanoseconds == shot.timeElapsedNanoseconds && Objects.equals(x, shot.x) && Objects.equals(y, shot.y) && Objects.equals(r, shot.r) && Objects.equals(creationDateTime, shot.creationDateTime);
+        return id == shot.id &&
+                hit == shot.hit &&
+                timeElapsedNanoseconds == shot.timeElapsedNanoseconds &&
+                zoneOffsetSeconds == shot.zoneOffsetSeconds &&
+                Objects.equals(x, shot.x) &&
+                Objects.equals(y, shot.y) &&
+                Objects.equals(r, shot.r) &&
+                Objects.equals(creationDateTime, shot.creationDateTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, x, y, r, hit, creationDateTime, timeElapsedNanoseconds);
+        return Objects.hash(id, x, y, r, hit, creationDateTime, zoneOffsetSeconds, timeElapsedNanoseconds);
     }
 
     @Override
@@ -119,6 +137,7 @@ public class Shot {
                 ", r=" + r +
                 ", hit=" + hit +
                 ", creationDateTime=" + creationDateTime +
+                ", zoneOffsetSeconds=" + zoneOffsetSeconds +
                 ", timeElapsedNanoseconds=" + timeElapsedNanoseconds +
                 '}';
     }

@@ -14,6 +14,14 @@ import jakarta.validation.constraints.NotNull;
 public class DisposedJwt {
     private String jwt;
 
+    public DisposedJwt() {
+        super();
+    }
+
+    public DisposedJwt(String jwt) {
+        this.jwt = jwt;
+    }
+
     /**
      * Gets the JWT string.
      * @return The JWT string.
