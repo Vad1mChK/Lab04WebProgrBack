@@ -25,6 +25,7 @@ dependencies {
     compileOnly('jakarta.platform:jakarta.jakartaee-web-api:9.1.0')
     implementation('org.hibernate:hibernate-core:6.0.2.Final')
     implementation('org.postgresql:postgresql:42.7.0')
+    implementation('io.jsonwebtoken:jjwt-api:0.12.3')
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")

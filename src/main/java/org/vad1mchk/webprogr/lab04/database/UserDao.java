@@ -7,18 +7,15 @@ import org.vad1mchk.webprogr.lab04.model.entity.User;
 import java.util.List;
 
 @Stateless
-@LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class UserDao implements Dao<User> {
+public class UserDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Override
     public List<User> selectAll() {
         return entityManager.createQuery("Select u from User u").getResultList();
     }
 
-    @Override
     public User selectById(long id) {
         return entityManager.find(User.class, id);
     }
@@ -34,19 +31,16 @@ public class UserDao implements Dao<User> {
         return null;
     }
 
-    @Override
     public User insert(User element) {
         entityManager.persist(element);
         return element;
     }
 
-    @Override
     public User update(User element) {
         entityManager.merge(element);
         return element;
     }
 
-    @Override
     public void delete(User element) {
         if (entityManager.contains(element)) {
             entityManager.remove(element);

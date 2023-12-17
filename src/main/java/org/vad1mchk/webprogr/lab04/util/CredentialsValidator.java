@@ -16,7 +16,7 @@ public class CredentialsValidator {
     private static final int PASSWORD_MIN_SPECIALS = 1;
     private final Pattern lettersPattern = Pattern.compile("[A-Za-z]");
     private final Pattern digitsPattern = Pattern.compile("[0-9]");
-    private final Pattern specialsPattern = Pattern.compile("[-.,?!]");
+    private final Pattern specialsPattern = Pattern.compile("[^0-9a-zA-Z]");
 
     public String validateUsername(String username) {
         if (username == null || username.isEmpty()) {
@@ -47,7 +47,7 @@ public class CredentialsValidator {
         ) {
             return "Пароль должен содержать: букв латиницы — не менее " + PASSWORD_MIN_LETTERS + ", " +
                     "цифр — не менее " + PASSWORD_MIN_DIGITS + ", " +
-                    "спец. символов ( -.,?! ) — не менее " + PASSWORD_MIN_SPECIALS + ". ";
+                    "спецсимволов — не менее " + PASSWORD_MIN_SPECIALS + ". ";
         }
 
         return null;

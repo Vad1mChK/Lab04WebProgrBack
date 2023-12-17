@@ -15,7 +15,7 @@ import java.util.Set;
 @Priority(Priorities.HEADER_DECORATOR)
 public class HttpMethodFilter implements ContainerRequestFilter {
     private static final Set<String> ALLOWED_METHODS = Set.of(
-            "GET", "POST", "PUT", "DELETE"
+            "GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"
     );
 
     @Override

@@ -12,7 +12,6 @@ public class User {
     private String username;
     private byte[] passwordHashed;
     private byte[] salt;
-    private boolean loggedIn;
 
     public User() {
         super();
@@ -56,26 +55,17 @@ public class User {
         this.salt = saltHashed;
     }
 
-    @Column(name = "logged_in")
-    public boolean isLoggedIn() {
-        return loggedIn;
-    }
-
-    public void setLoggedIn(boolean loggedIn) {
-        this.loggedIn = loggedIn;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return id == user.id && loggedIn == user.loggedIn && Objects.equals(username, user.username) && Arrays.equals(passwordHashed, user.passwordHashed) && Arrays.equals(salt, user.salt);
+        return id == user.id && Objects.equals(username, user.username) && Arrays.equals(passwordHashed, user.passwordHashed) && Arrays.equals(salt, user.salt);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, username, loggedIn);
+        int result = Objects.hash(id, username);
         result = 31 * result + Arrays.hashCode(passwordHashed);
         result = 31 * result + Arrays.hashCode(salt);
         return result;
@@ -88,7 +78,6 @@ public class User {
                 ", name='" + username + '\'' +
                 ", passwordHashed=" + Arrays.toString(passwordHashed) +
                 ", saltHashed=" + Arrays.toString(salt) +
-                ", loggedIn=" + loggedIn +
                 '}';
     }
 }

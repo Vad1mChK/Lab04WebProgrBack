@@ -3,6 +3,7 @@ package org.vad1mchk.webprogr.lab04.service;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.security.auth.message.AuthException;
+import org.vad1mchk.webprogr.lab04.database.DisposedJwtDao;
 import org.vad1mchk.webprogr.lab04.database.UserDao;
 import org.vad1mchk.webprogr.lab04.model.entity.User;
 import org.vad1mchk.webprogr.lab04.model.request.UserRequestDto;
@@ -21,6 +22,10 @@ import java.util.stream.Collectors;
 public class UserService {
     @EJB
     private UserDao userDao;
+
+    @EJB
+    private DisposedJwtDao disposedJwtDao;
+
     @EJB
     private CredentialsValidator credentialsValidator;
 
@@ -29,7 +34,7 @@ public class UserService {
         List<User> users = userDao.selectAll();
         return users.stream()
                 .filter(Objects::nonNull)
-                .map((user) -> new UserResponseDto(user.getId(), user.getUsername(), user.isLoggedIn()))
+                .map((user) -> new UserResponseDto(user.getId(), user.getUsername()))
                 .collect(Collectors.toList());
     }
 
@@ -51,7 +56,7 @@ public class UserService {
 
         userDao.insert(user);
 
-        return new UserResponseDto(user.getId(), user.getUsername(), user.isLoggedIn());
+        return new UserResponseDto(user.getId(), user.getUsername());
     }
 
     public UserResponseDto logInUser(UserRequestDto request) throws AuthException {
@@ -73,9 +78,7 @@ public class UserService {
             throw new AuthException("Неверный пароль.");
         }
 
-        user.setLoggedIn(true);
-
-        return new UserResponseDto(user.getId(), user.getUsername(), user.isLoggedIn());
+        return new UserResponseDto(user.getId(), user.getUsername());
     }
 
     private void validateCredentials(String username, String password) throws AuthException {
