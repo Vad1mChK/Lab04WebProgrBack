@@ -21,14 +21,14 @@ public class ShotResource {
     private ShotService service;
 
     @GET
-    public Response getAllShots(@HeaderParam("Authorization") String authHeader) {
+    public Response getShotsByOwner(@HeaderParam("Authorization") String authHeader) {
         Response errorResponse = checkAuthHeader(authHeader);
         if (errorResponse != null) return errorResponse;
 
         String jwt = jwtFromAuthHeader(authHeader);
 
         try {
-            List<ShotResponseDto> responseDtoList = service.getAllShots(jwt);
+            List<ShotResponseDto> responseDtoList = service.getShotsByOwner(jwt);
             return Response.ok(responseDtoList).build();
         } catch (AuthException e) {
             return Response.status(Response.Status.UNAUTHORIZED).entity(new ErrorMessageResponseDto(e)).build();

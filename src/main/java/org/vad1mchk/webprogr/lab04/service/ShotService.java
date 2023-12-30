@@ -32,12 +32,14 @@ public class ShotService {
     @EJB
     private JwtTokenProvider jwtProvider;
 
-    public List<ShotResponseDto> getAllShots(String jwt) throws AuthException {
+    public List<ShotResponseDto> getShotsByOwner(String jwt) throws AuthException {
         validateToken(jwt);
         ZonedDateTimeFormatter formatter = new ZonedDateTimeFormatter();
 
+        User user = getUserByJwt(jwt);
+
         return shotDao
-                .selectAll()
+                .selectByOwner(user)
                 .stream()
                 .map(ShotResponseDto::fromShot)
                 .collect(Collectors.toList());

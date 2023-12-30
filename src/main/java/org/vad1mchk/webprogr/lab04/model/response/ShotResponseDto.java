@@ -8,9 +8,9 @@ import java.time.ZoneOffset;
 public class ShotResponseDto {
     private long id;
     private String ownerName;
-    private String x;
-    private String y;
-    private String r;
+    private String xString;
+    private String yString;
+    private String rString;
     private boolean hit;
     private String creationDateTime;
     private long timeElapsedNs;
@@ -23,16 +23,16 @@ public class ShotResponseDto {
         return ownerName;
     }
 
-    public String getX() {
-        return x;
+    public String getxString() {
+        return xString;
     }
 
-    public String getY() {
-        return y;
+    public String getyString() {
+        return yString;
     }
 
-    public String getR() {
-        return r;
+    public String getrString() {
+        return rString;
     }
 
     public boolean isHit() {
@@ -55,16 +55,16 @@ public class ShotResponseDto {
         this.ownerName = ownerName;
     }
 
-    public void setX(String x) {
-        this.x = x;
+    public void setxString(String xString) {
+        this.xString = xString;
     }
 
-    public void setY(String y) {
-        this.y = y;
+    public void setyString(String yString) {
+        this.yString = yString;
     }
 
-    public void setR(String r) {
-        this.r = r;
+    public void setrString(String rString) {
+        this.rString = rString;
     }
 
     public void setHit(boolean hit) {
@@ -83,9 +83,9 @@ public class ShotResponseDto {
         ShotResponseDto shotResponseDto = new ShotResponseDto();
         shotResponseDto.setId(shot.getId());
         shotResponseDto.setOwnerName(shot.getOwner().getUsername());
-        shotResponseDto.setX(shot.getX().stripTrailingZeros().toPlainString());
-        shotResponseDto.setY(shot.getY().stripTrailingZeros().toPlainString());
-        shotResponseDto.setR(shot.getR().stripTrailingZeros().toPlainString());
+        shotResponseDto.setxString(shot.getX().stripTrailingZeros().toPlainString());
+        shotResponseDto.setyString(shot.getY().stripTrailingZeros().toPlainString());
+        shotResponseDto.setrString(shot.getR().stripTrailingZeros().toPlainString());
         shotResponseDto.setHit(shot.isHit());
         shotResponseDto.setCreationDateTime(
                 ZonedDateTimeFormatter.toString(shot.getCreationDateTime().atZone(

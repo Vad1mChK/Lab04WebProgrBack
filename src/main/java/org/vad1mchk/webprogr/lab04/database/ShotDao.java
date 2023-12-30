@@ -20,7 +20,13 @@ public class ShotDao {
     private EntityManager entityManager;
 
     public List<Shot> selectAll() {
-        return entityManager.createQuery("Select s from Shot s").getResultList();
+        return entityManager.createQuery("SELECT s FROM Shot s").getResultList();
+    }
+
+    public List<Shot> selectByOwner(User owner) {
+        Query query = entityManager.createQuery("SELECT s FROM Shot s WHERE owner = :o", Shot.class);
+        query.setParameter("o", owner);
+        return query.getResultList();
     }
 
     public Shot selectById(long id) {
