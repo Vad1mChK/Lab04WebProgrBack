@@ -20,11 +20,6 @@ public class UserResource {
     @EJB
     private UserService service;
 
-    @GET
-    public Response getAllUsers() {
-        return Response.ok(service.getAllUsers()).build();
-    }
-
     @POST
     @Path("/register")
     public Response registerUser(UserRequestDto requestDto) {
