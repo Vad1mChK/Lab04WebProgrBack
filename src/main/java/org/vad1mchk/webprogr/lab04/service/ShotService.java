@@ -1,6 +1,7 @@
 package org.vad1mchk.webprogr.lab04.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.vad1mchk.webprogr.lab04.model.request.ShotRequestDto;
 import org.vad1mchk.webprogr.lab04.model.response.ShotDeletionResponseDto;
 import org.vad1mchk.webprogr.lab04.model.response.ShotResponseDto;
 import org.vad1mchk.webprogr.lab04.util.JwtTokenProvider;
+import org.vad1mchk.webprogr.lab04.util.MathUtils;
 import org.vad1mchk.webprogr.lab04.util.ShotHitChecker;
 import org.vad1mchk.webprogr.lab04.util.ZonedDateTimeFormatter;
 
@@ -60,6 +62,12 @@ public class ShotService {
             BigDecimal x = new BigDecimal(xString);
             BigDecimal y = new BigDecimal(yString);
             BigDecimal r = new BigDecimal(rString);
+
+            if (shotRequestDto.isRound()) {
+                x = MathUtils.roundToSignificantDigits(x, Shot.FRACTIONAL_DIGITS);
+                y = MathUtils.roundToSignificantDigits(y, Shot.FRACTIONAL_DIGITS);
+                r = MathUtils.roundToSignificantDigits(r, Shot.FRACTIONAL_DIGITS);
+            }
 
             shot.setX(x);
             shot.setY(y);

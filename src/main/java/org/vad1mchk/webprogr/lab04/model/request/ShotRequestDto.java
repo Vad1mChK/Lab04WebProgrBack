@@ -5,6 +5,7 @@ public class ShotRequestDto {
     String y;
     String r;
     int zone;
+    boolean round;
 
     public String getX() {
         return x;
@@ -36,5 +37,12 @@ public class ShotRequestDto {
 
     public void setZone(int zone) {
         this.zone = zone;
+    }
+    public boolean isRound() {
+        return round;
+    }
+
+    public void setRound(boolean round) {
+        this.round = round;
     }
 }

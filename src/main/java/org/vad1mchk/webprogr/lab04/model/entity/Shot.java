@@ -10,6 +10,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "w_shot", schema = "s322864")
 public class Shot {
+    public static final int FRACTIONAL_DIGITS = 6;
+
     private long id;
     private User owner;
     private BigDecimal x;
@@ -45,7 +47,7 @@ public class Shot {
         this.owner = owner;
     }
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     public BigDecimal getX() {
         return x;
     }
@@ -54,7 +56,7 @@ public class Shot {
         this.x = x;
     }
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     public BigDecimal getY() {
         return y;
     }
@@ -63,7 +65,7 @@ public class Shot {
         this.y = y;
     }
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     public BigDecimal getR() {
         return r;
     }
